@@ -111,6 +111,7 @@ router.post('/addevent', function(req, res) {
   .then(event => {
     res.redirect('chooser')
   }).catch(err=>res.send(err))  
+  console.log(err)
 })
 
 
@@ -122,9 +123,10 @@ router.post('/addfriend', function(req, res) {
     db.User.findOne(req.user.id)
   .then(user => {
     user.friends.push({
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone
+        // name: req.body.name,
+        // email: req.body.email,
+        // phone: req.body.phone
+        id: req.body.id
     })
     user.save().then(() => {
         res.send({ friends: user.friends})
@@ -147,9 +149,14 @@ router.get('/chooser', function(req, res) {
         Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
     }}).then( function(apiResponse) {
         var restaurant = apiResponse.data.businesses;
-        
-      
-        console.log(apiResponse);
+        // let info = [restaurant[0].name, restaurant[0].rating]
+        let infoTwo;
+        for (let i = 0; i <= 5; i++) {
+          infoTwo = [restaurant[i].name, restaurant[i].rating, restaurant[i].location.address1, restaurant[i].price]
+          console.log(infoTwo)
+        }
+        console.log(req.body)
+        console.log(infoTwo);
         res.send({ restaurant });
       }).catch(err => {
           console.log(err);
@@ -188,5 +195,16 @@ router.post('/chooser', function(req, res) {
       })
   })
 })
+
+router.get('/event/:id', function(req, res) {
+  db.Event.findById(req.params.id)
+  .then(event=>res.send(event))
+  .catch(err=>res.send({message: 'error ingetting event', err}));
+})
+
+router.post('/event/:id', function(req, res) {
+
+})
+
 
 module.exports = router

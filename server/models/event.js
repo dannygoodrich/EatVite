@@ -11,10 +11,7 @@ const eventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }],
-  restaurants: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant'
-  }]
+  restaurants: []
 })
 
 // // Use schema to create model
