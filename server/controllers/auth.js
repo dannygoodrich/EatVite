@@ -144,6 +144,7 @@ router.post('/addfriend', function(req, res) {
 
 
 router.get('/chooser', function(req, res) {
+  
     var yelpUrl = `https://api.yelp.com/v3/businesses/search?term=restaurants&location=${req.body}`;
     axios.get(yelpUrl, {headers: {
         Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
@@ -167,14 +168,28 @@ router.get('/chooser', function(req, res) {
 
 router.post('/chooser', function(req, res) {
   db.Restaurant.create({
-    userId: 1,
-  name: req.body.name,
-  rating: String,
-  style: String,
-  address: String,
-  price: String,
-  url: String,
-  phone: String
+  userId: req.params.id,
+  name: req.body.name
+  // rating: String,
+  // style: String,
+  // address: String,
+  // price: String,
+  // url: String,
+  // phone: String
+  })
+  .then(function(info) {
+    res.send({ info: info})
+
+  })
+})
+
+router.post('/chooser', function(req, res) {
+  db.Event.findByIdAndUpdate({
+  restauants: req.body
+  })
+  .then(function(info) {
+    res.send({ info: info})
+
   })
 })
 
