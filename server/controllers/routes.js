@@ -18,13 +18,16 @@ router.get('/profile', function(req, res) {
   let friends = []
   // {friends: [1,2,3]}
   user.friends.forEach((friendId) => {
-    friends.push(db.User.findById(friendId))
+    db.User.findById(friendId)
+    .then(friend => {
+      friends.push(friend)
+    })
   })
   let events = []
   // {events: [1,2,3]}
-  user.events.forEach((eventId) => {
-    events.push(db.User.findById(eventId))
-  })
+  // user.events.forEach((eventId) => {
+  //   events.push(db.User.findById(eventId))
+  // })
   res.send(({ friends: friends, events: events }))
 })
 
@@ -83,7 +86,13 @@ router.post('/chooser', function(req, res) {
         Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
     }}).then( function(apiResponse) {
         var restaurant = apiResponse.data.businesses;
-        
+        let infoTwo;
+        for (let i = 0; i <= 5; i++) {
+          infoTwo = [restaurant[i].name, restaurant[i].rating, restaurant[i].location.address1, restaurant[i].price]
+          console.log(infoTwo)
+        }
+        console.log(req.body)
+        console.log(infoTwo);
       
         console.log(restaurant);
         res.send({ restaurant });
